@@ -15,8 +15,8 @@ bl_info = {
 
 
 import bpy
-from . import operators, panels
-modules = [operators, panels]
+from . import properties, operators, panels
+modules = [properties, operators, panels]
 from importlib import reload
 for m in modules:
     reload(m)

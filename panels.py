@@ -11,9 +11,9 @@ import bpy
 ##############################################################################
 
 
-class PROPERTIES_PT_sweeper(bpy.types.Panel):
+class VIEW3D_PT_sweeper(bpy.types.Panel):
 
-    bl_idname = 'PROPERTIES_PT_sweeper'
+    bl_idname = 'VIEW3D_PT_sweeper'
     bl_label = 'Sweeper'
     bl_category = 'SamTools'
     bl_space_type = 'VIEW_3D'
@@ -23,35 +23,43 @@ class PROPERTIES_PT_sweeper(bpy.types.Panel):
         pass
 
 
-class PROPERTIES_PT_renaming(bpy.types.Panel):
+class VIEW3D_PT_autorename(bpy.types.Panel):
 
-    bl_idname = 'PROPERTIES_PT_renaming'
+    bl_idname = 'VIEW3D_PT_autorename'
     bl_label = 'Auto Rename'
-    bl_parent_id = 'PROPERTIES_PT_sweeper'
+    bl_parent_id = 'VIEW3D_PT_sweeper'
     bl_region_type = 'UI'
     bl_space_type = 'VIEW_3D'
 
     def draw(self, context):
+        settings = context.scene.sweeper_settings
         lay = self.layout
-        lay.use_property_split = True
-        lay.prop(context.scene, 'sweeper_easy_rename')
-        autorename = lay.column(align = True)
-        autorename.scale_y = 1.5
-        autorename.operator('sweeper.cleanup_ot_rename_objects_from_data', icon = 'OBJECT_DATA').data_from_objects = False
-        autorename.operator('sweeper.cleanup_ot_rename_objects_from_data', text = 'Data From Objects', icon = 'MESH_DATA').data_from_objects = True
-        autorename.separator()
-        autorename.operator('sweeper.cleanup_ot_rename_images_from_filenames', icon = 'OUTLINER_OB_IMAGE')
-        autorename.operator('sweeper.cleanup_ot_rename_materials_from_textures', icon = 'MATERIAL')
-        autorename.separator()
-        autorename.operator('sweeper.cleanup_ot_rename_instances_from_collections', icon = 'OUTLINER_OB_GROUP_INSTANCE')
+        lay.use_property_split = False
+        lay.use_property_decorate = False
+        lay.label(text='Keyword Rename:')
+        lay.prop(settings, 'rename_keyword', text='')
+        lay.separator()
+        lay.label(text='Auto Rename:')
+        autorename = lay.box()
+        row = autorename.row()
+        row.prop(settings, 'enable_rename_objects_data', text='')
+        row.prop(settings, 'options_rename_objects_data', text='', icon = 'OBJECT_DATA')
+        col = autorename.column(align=True)
+        col.prop(settings, 'enable_rename_collection_instances', icon = 'OUTLINER_OB_GROUP_INSTANCE')
+        col.prop(settings, 'enable_rename_images', icon = 'OUTLINER_OB_IMAGE', toggle=0, expand=True)
+        col.prop(settings, 'enable_rename_materials_image_textures', icon = 'MATERIAL')
+        row = autorename.row()
+        row.scale_y = 1.5
+        row.operator('sweeper.autorename_ot_run_auto_renamer')
 
 
-class PROPERTIES_PT_removing(bpy.types.Panel):
+class VIEW3D_PT_autoremove(bpy.types.Panel):
 
-    bl_idname = 'PROPERTIES_PT_removing'
+    bl_idname = 'VIEW3D_PT_autoremove'
     bl_label = 'Auto Remove'
-    bl_parent_id = 'PROPERTIES_PT_sweeper'
+    bl_parent_id = 'VIEW3D_PT_sweeper'
     bl_region_type = 'UI'
+    bl_options = {'DEFAULT_CLOSED'}
     bl_space_type = 'VIEW_3D'
 
     def draw(self, context):
@@ -59,10 +67,10 @@ class PROPERTIES_PT_removing(bpy.types.Panel):
         lay.use_property_split = True
         autoremove = lay.column(align = True)
         autoremove.scale_y = 1.5
-        autoremove.operator('sweeper.cleanup_ot_remove_sharp_edges', icon = 'EDGESEL')
-        autoremove.operator('sweeper.cleanup_ot_remove_unused_material_slots', icon = 'MATERIAL')
-        autoremove.operator('sweeper.cleanup_ot_remove_vertex_groups', icon = 'GROUP_VERTEX')
-        autoremove.operator('sweeper.cleanup_ot_remove_custom_normals', icon = 'GROUP_VERTEX')
+        autoremove.operator('sweeper.autoremove_ot_remove_sharp_edges', icon = 'EDGESEL')
+        autoremove.operator('sweeper.autoremove_ot_remove_unused_material_slots', icon = 'MATERIAL')
+        autoremove.operator('sweeper.autoremove_ot_remove_vertex_groups', icon = 'GROUP_VERTEX')
+        autoremove.operator('sweeper.autoremove_ot_remove_custom_normals', icon = 'GROUP_VERTEX')
 
 
 ##############################################################################
@@ -70,18 +78,8 @@ class PROPERTIES_PT_removing(bpy.types.Panel):
 ##############################################################################
 
 
-classes = [
-    PROPERTIES_PT_sweeper,
-    PROPERTIES_PT_renaming,
-    PROPERTIES_PT_removing
-]
-
-
-def register():
-    for class_to_register in classes:
-        bpy.utils.register_class(class_to_register)
-
-
-def unregister():
-    for class_to_register in classes:
-        bpy.utils.unregister_class(class_to_register)
+register, unregister = bpy.utils.register_classes_factory([
+    VIEW3D_PT_sweeper,
+    VIEW3D_PT_autorename,
+    VIEW3D_PT_autoremove
+])

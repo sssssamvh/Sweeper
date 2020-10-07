@@ -38,9 +38,9 @@ def clear_vertex_groups():
         ob.vertex_groups.clear()
 
 
-def easy_rename(self, context):
+def keyword_rename(self, context):
     for ob in [ob for ob in context.selected_objects if not ob.library]:
-        ob.name = context.scene.sweeper_easy_rename
+        ob.name = context.scene.sweeper_settings.rename_keyword
     return None
 
 
@@ -58,7 +58,7 @@ def remove_unused_material_slots():
             bpy.ops.object.material_slot_remove_unused()
 
 
-def rename_images_from_filenames():
+def rename_images_to_filenames():
     """Auto-rename all images to their respective filename"""
 
     images = [image for image in bpy.data.images if not image.library and not image.name == 'Render Result']
@@ -66,8 +66,8 @@ def rename_images_from_filenames():
         image.name = Path(image.filepath).stem # Images are renamed to their filename, sans the extension
 
 
-def rename_instances_from_collections():
-    """Auto-rename the selected empties to the collection they instance.\nOn selection or everything"""
+def rename_collection_instances():
+    """Auto-rename the selected empties to the collection they instantiate.\nOn selection or everything"""
 
     if len(bpy.context.selected_objects) > 0:
         objects = [ob for ob in bpy.context.selected_objects if ob.instance_type == 'COLLECTION' and not ob.library]
@@ -78,7 +78,7 @@ def rename_instances_from_collections():
         ob.name = ob.instance_collection.name
 
 
-def rename_materials_from_textures():
+def rename_materials_to_textures():
     """Auto-rename all materials to the name of their first Image Texture node's datablock"""
 
     materials = [mat for mat in bpy.data.materials if not mat.library]
@@ -94,13 +94,13 @@ def rename_materials_from_textures():
             mat.name = first_image_texture.image.nam
 
 
-def rename_objects_from_data(data_from_objects:bool):
+def rename_objects_data(mode:str):
     """Auto-rename the selected objects to their data, or vice-versa.\nOn selection or everything"""
 
-    def target_is_not_linked(ob):
-        if data_from_objects:
-            return not ob.data.library
-        return not ob.library
+    def target_is_not_linked(ob:bpy.types.Object) -> bool:
+        if mode == 'rename_objects_to_data':
+            return not ob.library
+        return not ob.data.library
 
     if len(bpy.context.selected_objects) > 0:
         objects = [ob for ob in bpy.context.selected_objects if ob.data and target_is_not_linked(ob)]
@@ -108,10 +108,10 @@ def rename_objects_from_data(data_from_objects:bool):
         objects = [ob for ob in bpy.data.objects if ob.data and target_is_not_linked(ob)]
 
     for ob in objects:
-        if data_from_objects:
-            ob.data.name = ob.name
-        else:
+        if mode == 'rename_objects_to_data':
             ob.name = ob.data.name
+        else:
+            ob.data.name = ob.name
 
 
 def remove_custom_normals():
@@ -128,3 +128,20 @@ def remove_custom_normals():
             bpy.ops.mesh.customdata_custom_splitnormals_clear()
         except RuntimeError:
             pass
+
+
+def select_unsubdivided():
+    """Select all objects with a mesh data block and no subdivisions"""
+
+    objects = [ob for ob in bpy.context.scene.objects if ob.type == 'MESH' and not ob.library]
+
+    bpy.ops.object.select_all(action = 'DESELECT')
+
+    for ob in objects:
+        has_enabled_subsurf_modifiers = False
+        for mod in ob.modifiers:
+            if mod.type == 'SUBSURF':
+                has_enabled_subsurf_modifiers = mod.show_render and (mod.render_levels > 0 or ob.cycles.use_adaptive_subdivision)
+                break
+        if ob.name in bpy.context.view_layer.objects:
+            ob.select_set(not has_enabled_subsurf_modifiers)
