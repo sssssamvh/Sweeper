@@ -31,6 +31,8 @@ class AUTORENAME_OT_run_auto_renamer(bpy.types.Operator):
             functions.rename_materials_to_textures()
         if settings.enable_rename_collection_instances:
             functions.rename_collection_instances()
+        if settings.enable_rename_worlds_env_textures:
+            functions.rename_worlds_to_env_textures()
         return {'FINISHED'}
 
 

@@ -86,12 +86,26 @@ def rename_materials_to_textures():
     for mat in materials:
         first_image_texture = None
         for node in mat.node_tree.nodes:
-            if node.type == 'TEX_IMAGE':
+            if node.bl_idname == 'ShaderNodeTexImage':
                 if node.image:
                     first_image_texture = node
                     break
         if first_image_texture:
-            mat.name = first_image_texture.image.nam
+            mat.name = first_image_texture.image.name
+
+
+def rename_worlds_to_env_textures():
+    worlds = [world for world in bpy.data.worlds if not world.library]
+    for world in worlds:
+        first_env_texture = None
+        if world.node_tree:
+            for node in world.node_tree.nodes:
+                if node.bl_idname == 'ShaderNodeTexEnvironment':
+                    if node.image:
+                        first_env_texture = node
+                        break
+            if first_env_texture:
+                world.name = first_env_texture.image.name
 
 
 def rename_objects_data(mode:str):

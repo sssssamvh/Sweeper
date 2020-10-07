@@ -26,6 +26,7 @@ class SweeperSettings(bpy.types.PropertyGroup):
 
     enable_rename_images: bpy.props.BoolProperty(name='Images to Filenames', default=True, options=set())
     enable_rename_materials_image_textures: bpy.props.BoolProperty(name='Materials to Image Textures', default=False, options=set())
+    enable_rename_worlds_env_textures: bpy.props.BoolProperty(name='Worlds to Environment Textures', default=False, options=set())
     enable_rename_collection_instances: bpy.props.BoolProperty(name='Collection Instances', default=True, options=set())
 
 

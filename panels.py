@@ -46,11 +46,12 @@ class VIEW3D_PT_autorename(bpy.types.Panel):
         row.prop(settings, 'options_rename_objects_data', text='', icon = 'OBJECT_DATA')
         col = autorename.column(align=True)
         col.prop(settings, 'enable_rename_collection_instances', icon = 'OUTLINER_OB_GROUP_INSTANCE')
-        col.prop(settings, 'enable_rename_images', icon = 'OUTLINER_OB_IMAGE', toggle=0, expand=True)
+        col.prop(settings, 'enable_rename_images', icon = 'OUTLINER_OB_IMAGE')
         col.prop(settings, 'enable_rename_materials_image_textures', icon = 'MATERIAL')
+        col.prop(settings, 'enable_rename_worlds_env_textures', icon = 'WORLD_DATA')
         row = autorename.row()
         row.scale_y = 1.5
-        row.operator('sweeper.autorename_ot_run_auto_renamer')
+        row.operator('sweeper.autorename_ot_run_auto_renamer', icon='PLAY')
 
 
 class VIEW3D_PT_autoremove(bpy.types.Panel):
