@@ -18,22 +18,22 @@ class SweeperSettings(bpy.types.PropertyGroup):
 
     rename_keyword: bpy.props.StringProperty(name='Keyword', default='', update=functions.keyword_rename, options=set(), description='New name for the selected objects')
 
-    enable_rename_objects_data: bpy.props.BoolProperty(name='Rename Objects or Data', default=True, options=set(), description='On selection or everything')
-    options_rename_objects_data : bpy.props.EnumProperty(name='Mode', items = [
-        ('rename_objects_to_data', 'Objects to Linked Data', 'Rename objects to their linked data'),
-        ('rename_data_to_objects', 'Data to Last Linking Object', 'Rename data to the last object that links to it')
-    ], options=set(), default='rename_data_to_objects', description='On selection or everything')
+    enable_rename_objects: bpy.props.BoolProperty(name='Objects', default=True, options=set(), description='Apply naming conventions to Objects')
+    enable_rename_data: bpy.props.EnumProperty(name='Data options', items = [
+        ('and_data', 'And Data', 'Rename datablocks to their linking objects'),
+        ('to_data', 'From Data', 'Rename objects to their linked datablocks')
+    ], options=set(), default='and_data', description='Rename data to objects, or vice-versa')
+    enable_rename_collections: bpy.props.BoolProperty(name='Collections', default=True, options=set(), description='Apply naming conventions to Collections')
+    enable_rename_materials: bpy.props.BoolProperty(name='Materials', default=True, options=set(), description='Apply naming conventions to Materials')
 
-    enable_rename_images: bpy.props.BoolProperty(name='Images to Filenames', default=True, options=set())
-    enable_rename_materials_image_textures: bpy.props.BoolProperty(name='Materials to Image Textures', default=False, options=set())
-    enable_rename_worlds_env_textures: bpy.props.BoolProperty(name='Worlds to Environment Textures', default=False, options=set())
-    enable_rename_collection_instances: bpy.props.BoolProperty(name='Collection Instances', default=True, options=set(), description='On selection or everything')
-
-    enable_apply_naming_conventions: bpy.props.BoolProperty(name='Apply Naming Conventions', default=True, options=set(), description='On selection or everything. Customizable in Preferences')
+    enable_rename_images: bpy.props.BoolProperty(name='Images to Filenames', default=True, options=set(), description='Rename Images to their filename, sans its extension')
+    enable_rename_materials_image_textures: bpy.props.BoolProperty(name='Materials to Image Textures', default=False, options=set(), description='Rename Materials to their first Image Texture')
+    enable_rename_worlds_env_textures: bpy.props.BoolProperty(name='Worlds to Environment Textures', default=False, options=set(), description='Rename Worlds to their first Environment Texture')
 
     enable_remove_unused_material_slots: bpy.props.BoolProperty(name='Unused Material Slots', default=True, options=set(), description='On selection or everything')
     enable_remove_vertex_groups: bpy.props.BoolProperty(name='Vertex Groups', default=False, options=set(), description='On selection or everything')
-    enable_remove_custom_normals: bpy.props.BoolProperty(name='Sharp Edges and Custom Normals', default=False, options=set(), description='On selection or everything')
+    enable_remove_custom_normals: bpy.props.BoolProperty(name='Custom Normals', default=False, options=set(), description='On selection or everything')
+    enable_remove_uv_maps: bpy.props.BoolProperty(name='UV Maps', default=False, options=set(), description='On selection or everything')
 
 
 ##############################################################################
