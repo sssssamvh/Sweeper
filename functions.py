@@ -42,7 +42,7 @@ def acronym_by_data_type(data_type:str):
         'LATTICE': ap.data_type_lattice,
         'MATERIAL': ap.data_type_material,
         'MESH': ap.data_type_mesh,
-        'TEXT': ap.data_type_text,
+        'FONT': ap.data_type_text,
         'VOLUME': ap.data_type_volume
     }
     if data_type in acronyms.keys():

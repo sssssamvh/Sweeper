@@ -2,3 +2,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
+# CG Cookie Add-on Updater files
+sweeper_updater/
+sweeper_updater/Sweeper_updater_status.json
