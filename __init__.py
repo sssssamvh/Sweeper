@@ -15,7 +15,7 @@ bl_info = {
 
 
 import bpy
-from . import properties, operators, panels
+from . import properties, operators, panels, addon_updater_ops
 modules = [properties, operators, panels]
 from importlib import reload
 for m in modules:
@@ -63,6 +63,12 @@ class SweeperAddonPreferences(bpy.types.AddonPreferences):
     show_rename_objects: bpy.props.BoolProperty(name='Object Renaming Acronyms', description='Show object data acronyms', default=False)
     show_rename_data: bpy.props.BoolProperty(name='Data Renaming Acronyms', description='Show data acronyms', default=False)
     show_rename_lights: bpy.props.BoolProperty(name='Light Renaming Acronyms', description='Show light role acronyms', default=False)
+
+    auto_check_update: bpy.props.BoolProperty(name='Auto-check for Update', description='If enabled, auto-check for updates using an interval', default=False,)
+    updater_intrval_months: bpy.props.IntProperty(name='Months', description='Number of months between checking for updates', default=0, min=0)
+    updater_intrval_days: bpy.props.IntProperty(name='Days', description='Number of days between checking for updates', default=7, min=0, max=31)
+    updater_intrval_hours: bpy.props.IntProperty(name='Hours', description='Number of hours between checking for updates', default=0, min=0, max=23)
+    updater_intrval_minutes: bpy.props.IntProperty(name='Minutes', description='Number of minutes between checking for updates', default=0, min=0, max=59)
 
     def draw(self, context):
         lay = self.layout
@@ -122,6 +128,8 @@ class SweeperAddonPreferences(bpy.types.AddonPreferences):
             col.prop(self, 'light_type_volume')
             col.prop(self, 'light_type_volume_triggers')
 
+        addon_updater_ops.update_settings_ui(self, context)
+
 
 ##############################################################################
 # Registration
@@ -129,6 +137,7 @@ class SweeperAddonPreferences(bpy.types.AddonPreferences):
 
 
 def register():
+    addon_updater_ops.register(bl_info)
     bpy.utils.register_class(SweeperAddonPreferences)
     for module in modules:
         module.register()
@@ -136,8 +145,9 @@ def register():
 
 def unregister():
     bpy.utils.unregister_class(SweeperAddonPreferences)
-    for module in modules:
+    for module in reversed(modules):
         module.unregister()
+    addon_updater_ops.unregister()
 
 
 if __name__ == '__main__':

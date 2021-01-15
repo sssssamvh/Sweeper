@@ -4,6 +4,7 @@
 
 
 import bpy
+from . import addon_updater_ops
 
 
 ##############################################################################
@@ -21,6 +22,7 @@ class VIEW3D_PT_sweeper(bpy.types.Panel):
 
     def draw(self, context):
         lay = self.layout
+        addon_updater_ops.update_notice_box_ui(self, context)
         lay.operator('sweeper.utilities_ot_select_unsubdivided')
 
 
