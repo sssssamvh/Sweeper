@@ -205,3 +205,16 @@ def select_unsubdivided():
                 break
         if ob.name in bpy.context.view_layer.objects:
             ob.select_set(not has_enabled_subsurf_modifiers)
+
+def sort_collections_alphabetically():
+
+    def sort_collection(collection):
+        if not collection.children:
+            return
+        children = sorted(collection.children, key=lambda c: c.name)
+        for child in children:  
+            collection.children.unlink(child)
+            collection.children.link(child)
+            sort_collection(child)
+
+    sort_collection(bpy.context.scene.collection)

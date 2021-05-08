@@ -69,6 +69,17 @@ class UTILITIES_OT_select_unsubdivided(bpy.types.Operator):
         return {'FINISHED'}
 
 
+class UTILITIES_OT_sort_collections_alphabetically(bpy.types.Operator):
+    """Sort collections alphabetically in the Outliner"""
+
+    bl_idname = "sweeper.utilities_ot_sort_collections_alphabetically"
+    bl_label = "Sort Collections Alphabetically"
+
+    def execute(self, context):
+        functions.sort_collections_alphabetically()
+        return {'FINISHED'}
+
+
 ##############################################################################
 # Registration
 ##############################################################################
@@ -77,5 +88,6 @@ class UTILITIES_OT_select_unsubdivided(bpy.types.Operator):
 register, unregister = bpy.utils.register_classes_factory([
     AUTOREMOVE_OT_run_auto_remover,
     AUTORENAME_OT_run_auto_renamer,
-    UTILITIES_OT_select_unsubdivided
+    UTILITIES_OT_select_unsubdivided,
+    UTILITIES_OT_sort_collections_alphabetically
 ])

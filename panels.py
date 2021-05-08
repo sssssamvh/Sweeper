@@ -23,7 +23,6 @@ class VIEW3D_PT_sweeper(bpy.types.Panel):
     def draw(self, context):
         lay = self.layout
         addon_updater_ops.update_notice_box_ui(self, context)
-        lay.operator('sweeper.utilities_ot_select_unsubdivided')
 
 
 class VIEW3D_PT_autorename(bpy.types.Panel):
@@ -98,8 +97,9 @@ class VIEW3D_PT_utilities(bpy.types.Panel):
 
     def draw(self, context):
         lay = self.layout
-        lay.use_property_split = True
-        lay.operator('sweeper.utilities_ot_select_unsubdivided', icon='MOD_SUBSURF')
+        col = lay.column(align=True)
+        col.operator('sweeper.utilities_ot_select_unsubdivided', icon='MOD_SUBSURF')
+        col.operator('sweeper.utilities_ot_sort_collections_alphabetically', icon='OUTLINER')
 
 
 ##############################################################################
@@ -110,5 +110,6 @@ class VIEW3D_PT_utilities(bpy.types.Panel):
 register, unregister = bpy.utils.register_classes_factory([
     VIEW3D_PT_sweeper,
     VIEW3D_PT_autorename,
-    VIEW3D_PT_autoremove
+    VIEW3D_PT_autoremove,
+    VIEW3D_PT_utilities
 ])
