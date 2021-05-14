@@ -2,7 +2,7 @@ bl_info = {
     'name': 'Sweeper',
     'description': 'Auto-renaming and scene cleanup tools.',
     'author': 'Sam Van Hulle',
-    'version': (0, 0, 2),
+    'version': (0, 0, 3),
     'blender': (2, 90, 0),
     'location': 'View3D > UI',
     'category': 'Tools'
