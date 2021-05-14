@@ -98,7 +98,6 @@ class VIEW3D_PT_utilities(bpy.types.Panel):
     def draw(self, context):
         lay = self.layout
         col = lay.column(align=True)
-        col.operator('sweeper.utilities_ot_select_unsubdivided', icon='MOD_SUBSURF')
         col.operator('sweeper.utilities_ot_sort_collections_alphabetically', icon='OUTLINER')
 
 

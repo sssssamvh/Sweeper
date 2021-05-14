@@ -58,17 +58,6 @@ class AUTOREMOVE_OT_run_auto_remover(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class UTILITIES_OT_select_unsubdivided(bpy.types.Operator):
-    """Select all objects with a mesh data block and no subdivisions"""
-
-    bl_idname = "sweeper.utilities_ot_select_unsubdivided"
-    bl_label = "Select Unsubdivided"
-
-    def execute(self, context):
-        functions.select_unsubdivided()
-        return {'FINISHED'}
-
-
 class UTILITIES_OT_sort_collections_alphabetically(bpy.types.Operator):
     """Sort collections alphabetically in the Outliner"""
 
@@ -88,6 +77,5 @@ class UTILITIES_OT_sort_collections_alphabetically(bpy.types.Operator):
 register, unregister = bpy.utils.register_classes_factory([
     AUTOREMOVE_OT_run_auto_remover,
     AUTORENAME_OT_run_auto_renamer,
-    UTILITIES_OT_select_unsubdivided,
     UTILITIES_OT_sort_collections_alphabetically
 ])
