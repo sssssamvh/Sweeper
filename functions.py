@@ -117,7 +117,11 @@ def rename_images_to_filenames():
     images = [image for image in bpy.data.images if not image.library and not image.name == 'Render Result']
     for image in images:
         # Images are renamed to their filename, sans the extension
-        image.name = Path(image.filepath).stem
+        # Use absolute path for images with relative file paths
+        abs_path = image.filepath
+        if image.filepath.startswith('//'):
+            abs_path = bpy.path.abspath(image.filepath, library=image.library)
+        image.name = Path(abs_path).stem
 
 
 def rename_materials_to_textures():
@@ -200,7 +204,7 @@ def sort_collections_alphabetically():
         if not collection.children:
             return
         children = sorted(collection.children, key=lambda c: c.name)
-        for child in children:  
+        for child in children:
             collection.children.unlink(child)
             collection.children.link(child)
             sort_collection(child)
